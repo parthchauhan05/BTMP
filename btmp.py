@@ -10,7 +10,19 @@ app = Flask(__name__)
 ''' Routine for feed '''
 @app.route('/feed')
 def feed():
-	
+	# client = MongoClient('139.59.29.224',27017)
+	db = client['feed']
+	all_col = db.collection_names()
+	del all_col[all_col.index('system.indexes')]
+	feed = list()
+	for i in all_col:
+		col = db[i]
+		for i in col.find():
+			feed.append(i)
+
+	return jsonify(feed)
+
+
 ''' Routine for deleting messege '''
 @app.route('/msgd')
 def msgd():
